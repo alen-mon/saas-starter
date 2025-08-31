@@ -1,24 +1,52 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Users, Settings, Shield, Activity, Menu } from 'lucide-react';
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Users, Settings, Shield, Activity, Menu } from "lucide-react";
+
+type CurrentUser = { id: number; role: string; name?: string | null };
 
 export default function DashboardLayout({
-  children
+  children,
 }: {
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [me, setMe] = useState<CurrentUser | null>(null);
+
+  useEffect(() => {
+    fetch("/api/user")
+      .then((r) => r.json())
+      .then((u) => setMe(u))
+      .catch(() => setMe(null));
+  }, []);
 
   const navItems = [
-    { href: '/dashboard', icon: Users, label: 'Team' },
-    { href: '/dashboard/general', icon: Settings, label: 'General' },
-    { href: '/dashboard/activity', icon: Activity, label: 'Activity' },
-    { href: '/dashboard/security', icon: Shield, label: 'Security' }
+    { href: "/dashboard", icon: Users, label: "Team" },
+    { href: "/dashboard/general", icon: Settings, label: "General" },
+    { href: "/dashboard/activity", icon: Activity, label: "Activity" },
+    { href: "/dashboard/security", icon: Shield, label: "Security" },
+  ];
+
+  const adminItems = [
+    {
+      href: "/dashboard/admin/payments",
+      icon: Shield,
+      label: "Admin • Payments",
+    },
+    {
+      href: "/dashboard/admin/documents",
+      icon: Shield,
+      label: "Admin • Documents",
+    },
+    {
+      href: "/dashboard/admin/banned-names",
+      icon: Shield,
+      label: "Admin • Banned Names Import",
+    },
   ];
 
   return (
@@ -42,18 +70,18 @@ export default function DashboardLayout({
         {/* Sidebar */}
         <aside
           className={`w-64 bg-white lg:bg-gray-50 border-r border-gray-200 lg:block ${
-            isSidebarOpen ? 'block' : 'hidden'
+            isSidebarOpen ? "block" : "hidden"
           } lg:relative absolute inset-y-0 left-0 z-40 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
-            isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
           <nav className="h-full overflow-y-auto p-4">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href} passHref>
                 <Button
-                  variant={pathname === item.href ? 'secondary' : 'ghost'}
+                  variant={pathname === item.href ? "secondary" : "ghost"}
                   className={`shadow-none my-1 w-full justify-start ${
-                    pathname === item.href ? 'bg-gray-100' : ''
+                    pathname === item.href ? "bg-gray-100" : ""
                   }`}
                   onClick={() => setIsSidebarOpen(false)}
                 >
@@ -62,6 +90,28 @@ export default function DashboardLayout({
                 </Button>
               </Link>
             ))}
+
+            {me?.role === "admin" && (
+              <>
+                <div className="mt-4 mb-2 text-xs font-medium text-muted-foreground px-2">
+                  Admin
+                </div>
+                {adminItems.map((item) => (
+                  <Link key={item.href} href={item.href} passHref>
+                    <Button
+                      variant={pathname === item.href ? "secondary" : "ghost"}
+                      className={`shadow-none my-1 w-full justify-start ${
+                        pathname === item.href ? "bg-gray-100" : ""
+                      }`}
+                      onClick={() => setIsSidebarOpen(false)}
+                    >
+                      <item.icon className="h-4 w-4" />
+                      {item.label}
+                    </Button>
+                  </Link>
+                ))}
+              </>
+            )}
           </nav>
         </aside>
 

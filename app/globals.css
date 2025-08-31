@@ -65,6 +65,28 @@
   If we ever want to remove these styles, we need to add an explicit border
   color utility to any element that depends on these defaults.
 */
+
+/* small helper to ensure transform gets GPU layer */
+.will-change-transform {
+  will-change: transform;
+}
+
+/* Title text clipped with the same kind of background */
+.parallax-text {
+  background-image: url("/hero/ridge.jpg"); /* change to whichever image you prefer */
+  background-attachment: fixed; /* gives the parallax-feel in the letters */
+  background-size: cover;
+  background-position: center;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Optional: slightly reduce brightness so text is readable over varied images */
+.parallax-text::selection {
+  background: transparent;
+}
+
 @layer base {
   *,
   ::after,

@@ -1,6 +1,6 @@
-import Link from 'next/link';
-import { CircleIcon } from 'lucide-react';
-
+import Link from "next/link";
+import { CircleIcon } from "lucide-react";
+import avlogo from "../assets/avlogosvg.svg";
 export default function NotFound() {
   return (
     <div className="flex items-center justify-center min-h-[100dvh]">
@@ -9,11 +9,11 @@ export default function NotFound() {
           <CircleIcon className="size-12 text-orange-500" />
         </div>
         <h1 className="text-4xl font-bold text-gray-900 tracking-tight">
-          Page Not Found
+          Page Under Construction
         </h1>
         <p className="text-base text-gray-500">
-          The page you are looking for might have been removed, had its name
-          changed, or is temporarily unavailable.
+          The page you are looking for is still under construction. Please check
+          back later.
         </p>
         <Link
           href="/"
