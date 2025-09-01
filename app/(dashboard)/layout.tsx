@@ -44,9 +44,9 @@ function UserMenu() {
       <>
         <Link
           href="/pricing"
-          className="text-sm font-medium hidden sm:block text-gray-700 hover:text-gray-900"
+          className="text-sm font-medium hidden sm:flex text-gray-700 hover:text-gray-900"
         >
-          Registration Ticket
+          Ticket
         </Link>
         <Button asChild className="rounded-full">
           <Link href="/sign-up">Sign Up</Link>
@@ -166,7 +166,12 @@ function Header() {
           >
             <CreditCard size={16} /> Gallery
           </Link>
-
+          <Link
+            href="/content-creator-awards"
+            className="text-sm font-medium text-gray-700 hover:text-gray-900 flex items-center gap-1"
+          >
+            <CreditCard size={16} /> Content Creator Awards
+          </Link>
           {/* Contact */}
           <Link
             href="/contact"

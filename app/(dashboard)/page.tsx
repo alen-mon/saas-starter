@@ -100,7 +100,7 @@ export default function HomePage() {
                     variant="outline"
                     className="text-lg rounded-full"
                   >
-                    Venture In
+                    Register Now
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </a>

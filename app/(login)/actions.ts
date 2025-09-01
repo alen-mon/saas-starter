@@ -103,11 +103,23 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
 const signUpSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
-  inviteId: z.string().optional()
+  inviteId: z.string().optional(),
+  isCreator: z.enum(['yes', 'no']).optional()
 });
+
 
 export const signUp = validatedAction(signUpSchema, async (data, formData) => {
   const { email, password, inviteId } = data;
+
+// server-side acceptance check (in case JS is disabled)
+const accept = formData.get('acceptTerms') as string | null;
+if (accept !== 'true' && accept !== 'on') {
+  return {
+    error: 'You must accept the Terms & Conditions to create an account.',
+    email,
+    password
+  };
+}
 
   const existingUser = await db
     .select()
@@ -117,7 +129,7 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
 
   if (existingUser.length > 0) {
     return {
-      error: 'Failed to create user. Please try again.',
+      error: 'Failed to create user.User Already Exists with the mail ID. Please try again.',
       email,
       password
     };
